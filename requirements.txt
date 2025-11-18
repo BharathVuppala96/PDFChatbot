@@ -7,4 +7,6 @@ faiss-cpu
 openai
 tiktoken
 langchain-text-splitters
+langchain-core
+
 
