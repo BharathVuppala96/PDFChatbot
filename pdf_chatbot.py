@@ -1,7 +1,7 @@
 import streamlit as st
 from PyPDF2 import PdfReader
 from langchain_openai import ChatOpenAI
-from langchain.text_splitter import CharacterTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
@@ -33,14 +33,12 @@ def get_pdf_text(pdf_docs):
     return text
 
 def get_text_chunks(text):
-    text_splitter = CharacterTextSplitter(
-        separator="\n",
+    text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
         chunk_overlap=200,
-        length_function=len
     )
-    chunks = text_splitter.split_text(text)
-    return chunks
+    return text_splitter.split_text(text)
+    
 
 def get_conversation_chain(vectorstore):
     llm = ChatOpenAI(temperature=0.7, model_name='gpt-4o')
@@ -131,3 +129,4 @@ if st.session_state.processComplete:
 # Display initial instructions
 else:
     st.write("👈 Upload your PDFs in the sidebar to get started!")
+
